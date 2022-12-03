@@ -28,7 +28,7 @@ fn get_articles() -> Result<Json<Vec<Article>>, Status> {
             author_pseudo: "Dofe".to_string(),
         
             title: "What is Wasm ?".to_string(),
-            content: "Any \"alternative\" of JS".to_string()
+            content: "Any \"alternative\" for JS".to_string()
         }
     ];
 
