@@ -8,12 +8,12 @@ fn index() -> &'static str {
 // Articles
 #[get("/")]
 fn article() -> String {
-    format!("Get list of article")
+    format!("List of articles")
 }
 
 #[get("/<id>")]
 fn article_id(id: u64) -> String {
-    format!("Get article: {}", id)
+    format!("Article id: {}", id)
 }
 
 #[launch]
