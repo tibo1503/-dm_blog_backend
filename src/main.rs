@@ -83,6 +83,8 @@ struct Comment {
     content: String
 }
 
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
 struct Tag {
     id: i64,
 
@@ -102,6 +104,8 @@ struct Article {
     content: String
 }
 
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
 struct User {
     id: i64,
     pseudo: String,
@@ -111,6 +115,8 @@ struct User {
     last_connection_date: String
 }
 
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
 struct Role {
     id: i64,
     name: String,
