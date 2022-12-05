@@ -3,10 +3,13 @@ use rocket::http::Status;
 
 #[macro_use] extern crate rocket;
 
-#[get("/")]
-fn index() -> &'static str {
-    "Hello, world!"
-}
+// Auth
+
+
+// Users
+
+
+// Tags
 
 // Articles
 #[get("/")]
@@ -65,22 +68,29 @@ fn rocket() -> _ {
     let api_url = "/api/v1_dev".to_string();
 
     rocket::build()
-        .mount(format!("{}{}", api_url, "/"), routes![index])
-        .mount(format!("{}{}", api_url, "/auth"), routes![index])
+        //.mount(format!("{}{}", api_url, "/"), routes![])
+        //.mount(format!("{}{}", api_url, "/auth"), routes![])
+        //.mount(format!("{}{}", api_url, "/tags"), routes![])
         .mount(format!("{}{}", api_url, "/article"), routes![get_articles, get_article])
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize)]
 #[serde(crate = "rocket::serde")]
-struct Comment {
+struct Role {
     id: i64,
+    name: String,
+    description: String
+}
 
-    article_id: i64,
+#[derive(Serialize)]
+#[serde(crate = "rocket::serde")]
+struct User {
+    id: i64,
+    pseudo: String,
+    about: String,
 
-    author_id: i64,
-    author_pseudo: String,
-
-    content: String
+    inscription_date: String,
+    last_connection_date: String
 }
 
 #[derive(Serialize)]
@@ -104,21 +114,15 @@ struct Article {
     content: String
 }
 
-#[derive(Serialize)]
+#[derive(Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
-struct User {
+struct Comment {
     id: i64,
-    pseudo: String,
-    about: String,
 
-    inscription_date: String,
-    last_connection_date: String
-}
+    article_id: i64,
 
-#[derive(Serialize)]
-#[serde(crate = "rocket::serde")]
-struct Role {
-    id: i64,
-    name: String,
-    description: String
+    author_id: i64,
+    author_pseudo: String,
+
+    content: String
 }
