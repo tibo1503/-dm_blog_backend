@@ -10,16 +10,51 @@ fn rocket() -> _ {
     rocket::build()
         //.mount(format!("{}{}", api_url, "/"), routes![])
         //.mount(format!("{}{}", api_url, "/auth"), routes![])
-        .mount(format!("{}{}", api_url, "/article_tags"), routes![get_article_tags, get_article_tag])
+        .mount(format!("{}{}", api_url, "/user"), routes![get_users, get_user])
+        .mount(format!("{}{}", api_url, "/article_tag"), routes![get_article_tags, get_article_tag])
         .mount(format!("{}{}", api_url, "/article"), routes![get_articles, get_article])
 }
+mod serialization_struct;
 
 // Auth
 
-// Users
+// User
+use serialization_struct::user::User;
+
+#[get("/")]
+fn get_users() -> Result<Json<Vec<User>>, Status> {
+    Result::Ok(Json(vec![
+        User {
+            id: Option::Some(1),
+            pseudo: Option::Some("Dofe".to_string()),
+            ..Default::default()
+        },
+        User {
+            id: Option::Some(2),
+            pseudo: Option::Some("Mac_Bro0k".to_string()),
+            ..Default::default()
+        }
+    ]))
+}
+
+#[get("/<id>")]
+fn get_user(id: u64) -> Result<Json<User>, Status> {
+    match id { 
+        1 => Result::Ok(Json(User {
+            id: Option::Some(1),
+            pseudo: Option::Some("Dofe".to_string()),
+            ..Default::default()
+        })),
+        2 => Result::Ok(Json(User {
+            id: Option::Some(2),
+            pseudo: Option::Some("Mac_Bro0k".to_string()),
+            ..Default::default()
+        })),
+        _ => Result::Err(Status::NotFound)
+    }
+}
 
 // Article tags
-mod serialization_struct;
 use serialization_struct::tags::Tag;
 
 #[get("/")]
