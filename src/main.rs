@@ -8,17 +8,21 @@ fn rocket() -> _ {
     let api_url = "/api/v1_dev".to_string();
 
     rocket::build()
-        //.mount(format!("{}{}", api_url, "/"), routes![])
-        .mount(format!("{}{}", api_url, "/auth"), routes![auth])
+        .mount(format!("{}{}", api_url, "/"), routes![login, logout])
         .mount(format!("{}{}", api_url, "/user"), routes![get_users, get_user])
         .mount(format!("{}{}", api_url, "/article_tag"), routes![get_article_tags, get_article_tag])
         .mount(format!("{}{}", api_url, "/article"), routes![get_articles, get_article])
 }
 mod serialization_struct;
 
+// TEMP token test
+const TOKEN: &str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+const TOKEN_COOKIE_NAME: &str = "token";
+
 // Auth
 use rocket::form::Form;
 use rocket::fs::TempFile;
+use rocket::http::{CookieJar, Cookie};
 
 #[derive(FromForm)]
 struct Login {
@@ -26,13 +30,24 @@ struct Login {
     password: String
 }
 
-#[post("/", data = "<login>")]
-fn auth(login: Form<Login>) -> Status {
+#[post("/login", data = "<login>")]
+fn login(login: Form<Login>, cookie: &CookieJar<'_>) -> Status {
     if (login.username == "Dofe") && (login.password == "1234") {
+/*
+        if cookie.get(TOKEN_COOKIE_NAME) != Option::None {
+            cookie.remove(Cookie::named(TOKEN_COOKIE_NAME));
+        }
+*/       
+        cookie.add(Cookie::new("token", TOKEN));
         Status::Accepted
     } else {
         Status::NotAcceptable
     }
+}
+
+#[post("/logout")]
+fn logout(cookie: &CookieJar<'_>) {
+    cookie.remove(Cookie::named(TOKEN_COOKIE_NAME));
 }
 
 // User
