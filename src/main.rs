@@ -9,7 +9,7 @@ fn rocket() -> _ {
 
     rocket::build()
         //.mount(format!("{}{}", api_url, "/"), routes![])
-        //.mount(format!("{}{}", api_url, "/auth"), routes![])
+        .mount(format!("{}{}", api_url, "/auth"), routes![auth])
         .mount(format!("{}{}", api_url, "/user"), routes![get_users, get_user])
         .mount(format!("{}{}", api_url, "/article_tag"), routes![get_article_tags, get_article_tag])
         .mount(format!("{}{}", api_url, "/article"), routes![get_articles, get_article])
@@ -17,6 +17,23 @@ fn rocket() -> _ {
 mod serialization_struct;
 
 // Auth
+use rocket::form::Form;
+use rocket::fs::TempFile;
+
+#[derive(FromForm)]
+struct Login {
+    username: String,
+    password: String
+}
+
+#[post("/", data = "<login>")]
+fn auth(login: Form<Login>) -> Status {
+    if (login.username == "Dofe") && (login.password == "1234") {
+        Status::Accepted
+    } else {
+        Status::NotAcceptable
+    }
+}
 
 // User
 use serialization_struct::user::User;
