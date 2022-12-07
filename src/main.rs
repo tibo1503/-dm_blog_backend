@@ -3,11 +3,14 @@ use rocket::http::Status;
 
 #[macro_use] extern crate rocket;
 
+mod cors;
+
 #[launch]
 fn rocket() -> _ {
     let api_url = "/api/v1_dev".to_string();
 
     rocket::build()
+        .attach(cors::CORS)
         .mount(format!("{}{}", api_url, "/"), routes![login, logout])
         .mount(format!("{}{}", api_url, "/user"), routes![get_users, get_user])
         .mount(format!("{}{}", api_url, "/article_tag"), routes![get_article_tags, get_article_tag])
