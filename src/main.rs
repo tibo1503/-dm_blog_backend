@@ -18,13 +18,11 @@ fn rocket() -> _ {
 }
 mod serialization_struct;
 
-// TEMP token test
-const TOKEN: &str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
-const TOKEN_COOKIE_NAME: &str = "token";
-
 // Auth
 use rocket::form::Form;
 use rocket::http::{CookieJar, Cookie};
+//use crate::token_const::{TOKEN, TOKEN_COOKIE_FIELD};
+mod token_const;
 
 #[derive(FromForm)]
 struct Login {
@@ -40,7 +38,7 @@ fn login(login: Form<Login>, cookie: &CookieJar<'_>) -> Status {
             cookie.remove(Cookie::named(TOKEN_COOKIE_NAME));
         }
 */       
-        cookie.add(Cookie::new("token", TOKEN));
+        cookie.add(Cookie::new("token", token_const::TOKEN));
         Status::Accepted
     } else {
         Status::NotAcceptable
@@ -49,14 +47,16 @@ fn login(login: Form<Login>, cookie: &CookieJar<'_>) -> Status {
 
 #[post("/logout")]
 fn logout(cookie: &CookieJar<'_>) {
-    cookie.remove(Cookie::named(TOKEN_COOKIE_NAME));
+    cookie.remove(Cookie::named(token_const::TOKEN_COOKIE_FIELD));
 }
 
 // User
 use serialization_struct::user::User;
+mod request_guard;
+//use crate::{TOKEN, TOKEN_COOKIE_NAME}
 
 #[get("/")]
-fn get_users() -> Result<Json<Vec<User>>, Status> {
+fn get_users(_user: request_guard::user::User) -> Result<Json<Vec<User>>, Status> {
     Result::Ok(Json(vec![
         User {
             id: Option::Some(1),
