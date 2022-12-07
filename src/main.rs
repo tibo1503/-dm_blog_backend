@@ -24,7 +24,6 @@ const TOKEN_COOKIE_NAME: &str = "token";
 
 // Auth
 use rocket::form::Form;
-use rocket::fs::TempFile;
 use rocket::http::{CookieJar, Cookie};
 
 #[derive(FromForm)]
