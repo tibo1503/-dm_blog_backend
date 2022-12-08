@@ -2,8 +2,7 @@
 use rocket::serde::{json::Json};
 use rocket::http::Status;
 
-use serialization_struct::user::User;
-use crate::{request_guard, serialization_struct};
+use crate::serialization_struct;
 
 use serialization_struct::tags::Tag;
 
