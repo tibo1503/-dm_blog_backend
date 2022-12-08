@@ -4,6 +4,10 @@ use rocket::http::Status;
 #[macro_use] extern crate rocket;
 
 mod cors;
+mod request;
+use request::*;
+pub const TOKEN: &str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
+pub const TOKEN_COOKIE_FIELD: &str = "token";
 
 #[launch]
 fn rocket() -> _ {
@@ -11,44 +15,12 @@ fn rocket() -> _ {
 
     rocket::build()
         .attach(cors::CORS)
-        .mount(format!("{}{}", api_url, "/"), routes![login, logout])
+        .mount(format!("{}{}", api_url, "/"), routes![auth::login, auth::logout])
         .mount(format!("{}{}", api_url, "/user"), routes![get_users, get_user])
         .mount(format!("{}{}", api_url, "/article_tag"), routes![get_article_tags, get_article_tag])
         .mount(format!("{}{}", api_url, "/article"), routes![get_articles, get_article])
 }
 mod serialization_struct;
-
-// Auth
-use rocket::form::Form;
-use rocket::http::{CookieJar, Cookie};
-//use crate::token_const::{TOKEN, TOKEN_COOKIE_FIELD};
-mod token_const;
-
-#[derive(FromForm)]
-struct Login {
-    username: String,
-    password: String
-}
-
-#[post("/login", data = "<login>")]
-fn login(login: Form<Login>, cookie: &CookieJar<'_>) -> Status {
-    if (login.username == "Dofe") && (login.password == "1234") {
-/*
-        if cookie.get(TOKEN_COOKIE_NAME) != Option::None {
-            cookie.remove(Cookie::named(TOKEN_COOKIE_NAME));
-        }
-*/       
-        cookie.add(Cookie::new("token", token_const::TOKEN));
-        Status::Accepted
-    } else {
-        Status::NotAcceptable
-    }
-}
-
-#[post("/logout")]
-fn logout(cookie: &CookieJar<'_>) {
-    cookie.remove(Cookie::named(token_const::TOKEN_COOKIE_FIELD));
-}
 
 // User
 use serialization_struct::user::User;
