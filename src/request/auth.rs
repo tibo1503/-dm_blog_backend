@@ -1,8 +1,6 @@
-// Auth
 use rocket::serde::{json::Json};
-use rocket::http::Status;
 use rocket::form::Form;
-use rocket::http::{CookieJar, Cookie};
+use rocket::http::{Status, CookieJar, Cookie};
 //use crate::token_const::{TOKEN, TOKEN_COOKIE_FIELD};
 
 pub const TOKEN: &str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";

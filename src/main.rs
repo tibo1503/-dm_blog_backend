@@ -5,6 +5,7 @@ use rocket::http::Status;
 
 mod cors;
 mod request;
+mod request_guard;
 use request::*;
 pub const TOKEN: &str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c";
 pub const TOKEN_COOKIE_FIELD: &str = "token";
@@ -16,49 +17,11 @@ fn rocket() -> _ {
     rocket::build()
         .attach(cors::CORS)
         .mount(format!("{}{}", api_url, "/"), routes![auth::login, auth::logout])
-        .mount(format!("{}{}", api_url, "/user"), routes![get_users, get_user])
+        .mount(format!("{}{}", api_url, "/user"), routes![user::get_users, user::get_user])
         .mount(format!("{}{}", api_url, "/article_tag"), routes![get_article_tags, get_article_tag])
         .mount(format!("{}{}", api_url, "/article"), routes![get_articles, get_article])
 }
 mod serialization_struct;
-
-// User
-use serialization_struct::user::User;
-mod request_guard;
-//use crate::{TOKEN, TOKEN_COOKIE_NAME}
-
-#[get("/")]
-fn get_users(_user: request_guard::user::User) -> Result<Json<Vec<User>>, Status> {
-    Result::Ok(Json(vec![
-        User {
-            id: Option::Some(1),
-            pseudo: Option::Some("Dofe".to_string()),
-            ..Default::default()
-        },
-        User {
-            id: Option::Some(2),
-            pseudo: Option::Some("Mac_Bro0k".to_string()),
-            ..Default::default()
-        }
-    ]))
-}
-
-#[get("/<id>")]
-fn get_user(id: u64) -> Result<Json<User>, Status> {
-    match id { 
-        1 => Result::Ok(Json(User {
-            id: Option::Some(1),
-            pseudo: Option::Some("Dofe".to_string()),
-            ..Default::default()
-        })),
-        2 => Result::Ok(Json(User {
-            id: Option::Some(2),
-            pseudo: Option::Some("Mac_Bro0k".to_string()),
-            ..Default::default()
-        })),
-        _ => Result::Err(Status::NotFound)
-    }
-}
 
 // Article tags
 use serialization_struct::tags::Tag;
