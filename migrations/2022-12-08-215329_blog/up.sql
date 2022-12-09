@@ -26,6 +26,11 @@ CREATE TABLE role (
     description TEXT
 );
 
+INSERT INTO role (name, description)
+ VALUES
+ ('user', "Un utilisateur lambda"),
+ ('admin', "Opérateur pouvant supprimé des comptes et du comptenu");
+
 CREATE TABLE allowed (
     role_id INT NOT NULL,
     user_id INT NOT NULL,
