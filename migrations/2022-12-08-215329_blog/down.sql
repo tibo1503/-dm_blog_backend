@@ -12,7 +12,10 @@ DROP TABLE IF EXISTS article;
 
 -- Permissions
 DROP TABLE IF EXISTS allowed;
+DROP TABLE IF EXISTS role;
+
+-- Session
+DROP TABLE IF EXISTS token_session;
 
 -- Users
-DROP TABLE IF EXISTS role;
 DROP TABLE IF EXISTS user_blog;

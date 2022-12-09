@@ -1,7 +1,7 @@
 use rocket::serde::{Serialize};
 //use rocket::serde::*;
 
-#[derive(Serialize)]
+#[derive(Debug, Serialize)]
 #[serde(crate = "rocket::serde")]
 pub struct User {
     #[serde(skip_serializing_if = "Option::is_none")]

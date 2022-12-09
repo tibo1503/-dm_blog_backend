@@ -4,7 +4,19 @@ CREATE TABLE user_blog (
     pseudo VARCHAR(20) NOT NULL,
     about TEXT,
     inscription_date DATETIME NOT NULL,
-    last_connection_date DATETIME NOT NULL
+    last_connection_date DATETIME NOT NULL,
+    hashed_password CHAR(60) NOT NULL
+);
+
+-- Session
+CREATE TABLE token_session (
+    id INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+    user_id INT NOT NULL,
+    
+    token VARCHAR(255) NOT NULL,
+    session_name VARCHAR(20),
+
+	FOREIGN KEY (user_id) REFERENCES user_blog(id)
 );
 
 -- Permissions

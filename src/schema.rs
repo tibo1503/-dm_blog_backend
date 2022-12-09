@@ -54,12 +54,22 @@ table! {
 }
 
 table! {
+    token_session (id) {
+        id -> Integer,
+        user_id -> Integer,
+        token -> Varchar,
+        session_name -> Nullable<Varchar>,
+    }
+}
+
+table! {
     user_blog (id) {
         id -> Integer,
         pseudo -> Varchar,
         about -> Nullable<Text>,
         inscription_date -> Datetime,
         last_connection_date -> Datetime,
+        hashed_password -> Char,
     }
 }
 
@@ -77,6 +87,7 @@ joinable!(allowed -> user_blog (user_id));
 joinable!(article -> user_blog (author_id));
 joinable!(think -> article (article_id));
 joinable!(think -> comment (comment_id));
+joinable!(token_session -> user_blog (user_id));
 joinable!(was -> article (article_id));
 joinable!(was -> tag (tag_id));
 
@@ -88,6 +99,7 @@ allow_tables_to_appear_in_same_query!(
     role,
     tag,
     think,
+    token_session,
     user_blog,
     was,
 );
