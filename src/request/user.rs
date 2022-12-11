@@ -38,7 +38,7 @@ pub async fn get_users(mut db: Connection<Blog>, _user: request_guard::user::Use
 }
 
 #[get("/<id>")]
-pub async fn get_user(mut db: Connection<Blog>, id: u64) -> Result<Json<User>, Status> {
+pub async fn get_user(mut db: Connection<Blog>, id: u32) -> Result<Json<User>, Status> {
     let result = sqlx::query("SELECT id, pseudo, about FROM user_blog WHERE id = ?").bind(id)
         .fetch_one(&mut *db).await
         .and_then(|r| Ok(User {

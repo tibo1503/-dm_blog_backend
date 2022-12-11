@@ -2,4 +2,5 @@
 url = "file:rusqlite?mode=memory&cache=shared"
 
 [default.databases.blog]
-url = "mysql://root:root@127.0.0.1:3306/blog"
+url = "blog.sqlite"
+#url = "mysql://root:root@127.0.0.1:3306/blog"
